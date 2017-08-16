@@ -1,0 +1,32 @@
+#!/bin/sh
+
+#这句语句告诉bash如果任何语句的执行结果不是true则应该退出
+set -e
+
+#将环境变量BRANCH中的origion/ 替换为空字符串 
+SOURCE_BRANCH=${BRANCH/origin\//}
+TARGET_NAME="se-api-1.0-SNAPSHOT.jar"
+
+
+#将MAVEN生成的JAR包 转移到 ./root/opt/hbase/bin 目录中
+mv ../target/${TARGET_NAME} ./root/opt/se-api/bin
+
+#根据编译的分支信息 构建DOCKER映像
+docker build -t registry.enncloud.cn/ennwifi/se-api:${SOURCE_BRANCH} .
+
+#删除root目录
+rm -rf ./root
+
+
+#执行push脚本上传 docker映像到docker registry
+#登录DOCKER映像仓库
+docker login -u ennwifi -p 8wpqtV -e zhangjsf@enn.cn registry.enncloud.cn
+
+#将docker生成的映像上传到docker仓库中
+docker push registry.enncloud.cn/ennwifi/se-api:${SOURCE_BRANCH}
+
+
+count=`docker images|grep 'ˆ<none>'|awk '{print $3}'|wc -l`
+if [ $count -gt 0 ]; then
+    docker rmi `docker images|grep 'ˆ<none>'|awk '{print $3}'`
+fi

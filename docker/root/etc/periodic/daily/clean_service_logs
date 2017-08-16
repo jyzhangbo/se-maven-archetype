@@ -1,0 +1,7 @@
+#!/bin/sh
+cd /data/logs/
+rm -f *.`date -d '-1 day' '+%Y-%m-%d'`
+rm -f *.`date -d '-2 day' '+%Y-%m-%d'`
+rm -f *.`date -d '-3 day' '+%Y-%m-%d'`
+rm -f *.`date -d '-4 day' '+%Y-%m-%d'`
+rm -f *.`date -d '-5 day' '+%Y-%m-%d'`
