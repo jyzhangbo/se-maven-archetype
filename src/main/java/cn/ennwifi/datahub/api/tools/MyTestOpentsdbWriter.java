@@ -8,6 +8,7 @@ import org.springframework.boot.actuate.endpoint.MetricsEndpoint;
 import org.springframework.boot.actuate.endpoint.MetricsEndpointMetricReader;
 import org.springframework.boot.actuate.metrics.opentsdb.DefaultOpenTsdbNamingStrategy;
 import org.springframework.boot.actuate.metrics.opentsdb.OpenTsdbGaugeWriter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class MyTestOpentsdbWriter {
 
-
   @Bean
   public MetricsEndpointMetricReader metricsEndpointMetricReader(final MetricsEndpoint metricsEndpoint) {
     return new MetricsEndpointMetricReader(metricsEndpoint);
@@ -27,9 +27,9 @@ public class MyTestOpentsdbWriter {
 
   @Bean
   @ExportMetricWriter
+  @ConfigurationProperties("metrics.export")
   public OpenTsdbGaugeWriter openTsdbGaugeWriter() {
     OpenTsdbGaugeWriter open = new OpenTsdbGaugeWriter();
-    open.setUrl("http://10.39.0.151:4242/api/put");
     DefaultOpenTsdbNamingStrategy namingStrategy = new DefaultOpenTsdbNamingStrategy();
     Map<String, String> map = new HashMap<>();
     map.put("serverId", "1");
@@ -37,7 +37,5 @@ public class MyTestOpentsdbWriter {
     open.setNamingStrategy(namingStrategy);
     return open;
   }
-
-
 
 }

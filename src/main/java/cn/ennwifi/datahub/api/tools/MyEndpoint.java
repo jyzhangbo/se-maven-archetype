@@ -16,7 +16,7 @@ public class MyEndpoint implements Endpoint<List<String>> {
 
   @Override
   public String getId() {
-    return "server";
+    return "mytest";
   }
 
   @Override
@@ -38,7 +38,7 @@ public class MyEndpoint implements Endpoint<List<String>> {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return null;
+    return serverDetails;
   }
 
 }
